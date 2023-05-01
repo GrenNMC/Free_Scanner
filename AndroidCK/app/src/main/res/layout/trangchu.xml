@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginTop="30dp"
+    android:layout_marginBottom="15dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Free Scanner"
+        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"/>
+
+    <ImageView
+        android:id="@+id/btnSearch"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_search"
+        android:layout_alignParentStart="true"/>
+
+    <ImageView
+        android:id="@+id/btn_more"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_more"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:id="@+id/imageview"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_trangchu"
+        android:layout_marginTop="80dp"
+        android:layout_below="@id/app_name"
+        android:layout_centerHorizontal="true"/>
+    
+    <Button
+        android:id="@+id/btn_scan"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/imageview"
+        android:background="@drawable/btn_scanimage"
+        android:text="Scan Image"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:fontFamily="monospace"
+        android:drawableTop="@drawable/ic_camera"
+        android:paddingTop="20dp"/>
+
+    <Button
+        android:id="@+id/btn_ImageToText"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/imageview"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_imagetotext"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:textAllCaps="false"
+        android:text="Image To Text"
+        android:textColor="@color/white"
+        android:fontFamily="monospace"
+        android:drawableTop="@drawable/ic_imagetext"
+        android:paddingTop="20dp"/>
+
+    <Button
+        android:id="@+id/btn_split"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/btn_scan"
+        android:background="@drawable/btn_splitimage"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="30dp"
+        android:text="Split Image"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:fontFamily="monospace"
+        android:drawableTop="@drawable/ic_split"
+        android:paddingTop="20dp"/>
+
+    <Button
+        android:id="@+id/btn_allfile"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/btn_ImageToText"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/btn_allfile"
+        android:text="All Files"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:fontFamily="monospace"
+        android:drawableTop="@drawable/ic_file"
+        android:paddingTop="20dp"/>
+
+
+
+</RelativeLayout>
