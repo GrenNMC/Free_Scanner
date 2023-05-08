@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="30dp">
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Custom Images"
+        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"/>
+
+    <ImageView
+        android:id="@+id/btnSearch"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="25dp"
+        android:src="@drawable/ic_back_page"
+        android:layout_alignParentStart="true"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnSearch"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="#49B1FF"
+        android:gravity="center"
+        android:layout_centerHorizontal="true">
+        <ImageView
+            android:id="@+id/imageview"
+            android:layout_width="match_parent"
+            android:layout_height="520dp"
+            android:src="@drawable/image_trangchu" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/linearLayout"
+        android:background="#0085FF"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:src="@drawable/cancel"/>
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="70dp"
+            android:src="@drawable/scanner_24"/>
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:src="@drawable/baseline_check_circle_24" />
+    </LinearLayout>
+
+</RelativeLayout>
