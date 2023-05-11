@@ -1,0 +1,175 @@
+package hcmute.edu.androidck.Activity;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.Text;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+
+import java.io.IOException;
+
+import hcmute.edu.androidck.R;
+
+public class Ocr_text_recognition_activity extends AppCompatActivity {
+
+    private ImageView imageview;
+    private ImageView btnBack;
+    private ImageView btn_clear;
+    private ImageView btn_predict;
+    private ImageView btn_copy;
+    private TextView textResult;
+    private Uri uri;
+    private TextRecognizer textRecognizer;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ocr_text_recognition);
+        getPermission();
+        textResult = findViewById(R.id.textResult);
+        textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+
+        btn_predict = findViewById(R.id.btn_predict);
+        btn_predict.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(uri == null){
+                    Toast.makeText(Ocr_text_recognition_activity.this, "No image!!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    try {
+                        InputImage image = InputImage.fromFilePath(view.getContext(), uri);
+
+                        Task<Text> taskResult = textRecognizer.process(image)
+                                .addOnSuccessListener(new OnSuccessListener<Text>() {
+                                    @Override
+                                    public void onSuccess(Text text) {
+                                        String resultText = text.getText();
+                                        textResult.setText(resultText);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(Ocr_text_recognition_activity.this, "Recognition Fail!!", Toast.LENGTH_SHORT).show();
+                                        textResult.setText("Recognition Fail!!");
+                                    }
+                                });
+                    } catch (IOException e) {
+                        Toast.makeText(Ocr_text_recognition_activity.this, "Recognition Fail!!", Toast.LENGTH_SHORT).show();
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+
+        btn_copy = findViewById(R.id.btn_copy);
+        btn_copy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(textResult.getText().equals("")){
+                    Toast.makeText(Ocr_text_recognition_activity.this, "No text for copy!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(Ocr_text_recognition_activity.this, "Success copied to clipboard!", Toast.LENGTH_SHORT).show();
+                    ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clipData = ClipData.newPlainText("Data", textResult.getText().toString());
+                    clipboardManager.setPrimaryClip(clipData);
+                }
+            }
+        });
+
+        btn_clear = findViewById(R.id.btn_clear);
+        btn_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textResult.setText("");
+                imageview.setImageURI(null);
+            }
+        });
+
+        imageview = findViewById(R.id.imageview);
+        imageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                activityResult.launch(intent);
+            }
+        });
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+    }
+
+    private ActivityResultLauncher<Intent> activityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == Activity.RESULT_OK){
+                        if(result.getData() !=null){
+                            uri = result.getData().getData();
+                            imageview.setImageURI(uri);
+                        }
+                    }
+                    else {
+                        Toast.makeText(Ocr_text_recognition_activity.this, "No image ... ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+    public void getPermission(){
+        if(checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(Ocr_text_recognition_activity.this, new String[]{Manifest.permission.CAMERA}, 11);
+        }
+
+        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(Ocr_text_recognition_activity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 11);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == 11){
+            if(grantResults.length>0){
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    this.getPermission();
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+}

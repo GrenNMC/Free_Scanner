@@ -10,16 +10,27 @@ import android.widget.Button;
 
 import hcmute.edu.androidck.Activity.FileActivity;
 import hcmute.edu.androidck.Activity.FolderActivity;
+import hcmute.edu.androidck.Activity.Ocr_text_recognition_activity;
 
 public class MainActivity extends AppCompatActivity {
 
 
     private Button btn_allFile;
+    private Button btn_ImageToText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trangchu);
         btn_allFile = findViewById(R.id.btn_allfile);
+        btn_ImageToText= findViewById(R.id.btn_ImageToText);
+
+        btn_ImageToText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Ocr_text_recognition_activity.class);
+                startActivity(intent);
+            }
+        });
 
         btn_allFile.setOnClickListener(new View.OnClickListener() {
             @Override
