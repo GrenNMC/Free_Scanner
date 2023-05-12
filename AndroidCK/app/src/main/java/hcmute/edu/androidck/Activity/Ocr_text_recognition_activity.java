@@ -1,5 +1,7 @@
 package hcmute.edu.androidck.Activity;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -16,11 +18,20 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,29 +43,37 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
 import hcmute.edu.androidck.R;
 
 public class Ocr_text_recognition_activity extends AppCompatActivity {
 
+    public static final String TESS_DATA = "/tessdata";
+    private TessBaseAPI tessBaseAPI;
     private ImageView imageview;
     private ImageView btnBack;
     private ImageView btn_clear;
     private ImageView btn_predict;
     private ImageView btn_copy;
     private TextView textResult;
+    private Spinner spinner;
+    private int model_kit = 0;
     private Uri uri;
     private TextRecognizer textRecognizer;
+    private String[] models = {"Play service ML kit (English, Vietnamese,...)", "OCR Tess-two (Tesseract) (English)", "Tesseract OCR (Vietnamese)"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr_text_recognition);
         getPermission();
+        setSpinner();
         textResult = findViewById(R.id.textResult);
-        textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+
 
         btn_predict = findViewById(R.id.btn_predict);
         btn_predict.setOnClickListener(new View.OnClickListener() {
@@ -64,31 +83,61 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
                     Toast.makeText(Ocr_text_recognition_activity.this, "No image!!", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    try {
-                        InputImage image = InputImage.fromFilePath(view.getContext(), uri);
+                    switch (model_kit){
+                        case 0:{
+                            try {
+                                Toast.makeText(Ocr_text_recognition_activity.this, "Using model Play service ML kit!", Toast.LENGTH_SHORT).show();
+                                InputImage image = InputImage.fromFilePath(view.getContext(), uri);
+                                textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
-                        Task<Text> taskResult = textRecognizer.process(image)
-                                .addOnSuccessListener(new OnSuccessListener<Text>() {
-                                    @Override
-                                    public void onSuccess(Text text) {
-                                        String resultText = text.getText();
-                                        textResult.setText(resultText);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(Ocr_text_recognition_activity.this, "Recognition Fail!!", Toast.LENGTH_SHORT).show();
-                                        textResult.setText("Recognition Fail!!");
-                                    }
-                                });
-                    } catch (IOException e) {
-                        Toast.makeText(Ocr_text_recognition_activity.this, "Recognition Fail!!", Toast.LENGTH_SHORT).show();
-                        throw new RuntimeException(e);
+                                Task<Text> taskResult = textRecognizer.process(image)
+                                        .addOnSuccessListener(new OnSuccessListener<Text>() {
+                                            @Override
+                                            public void onSuccess(Text text) {
+                                                String resultText = text.getText();
+                                                textResult.setText(resultText);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(Ocr_text_recognition_activity.this, "Recognition Fail!!", Toast.LENGTH_SHORT).show();
+                                                textResult.setText("Recognition Fail!!");
+                                            }
+                                        });
+                            } catch (IOException e) {
+                                Toast.makeText(Ocr_text_recognition_activity.this, "Recognition Fail!!", Toast.LENGTH_SHORT).show();
+                                throw new RuntimeException(e);
+                            }
+                            break;
+                        }
+                        case 1:{
+                            Toast.makeText(Ocr_text_recognition_activity.this, "OCR Tess-two model (English)", Toast.LENGTH_SHORT).show();
+                            try{
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(view.getContext().getContentResolver(), uri);
+                                String result = getOCRText(bitmap,true);
+                                textResult.setText(result);
+                            }catch (Exception e){
+                                Log.e(TAG, e.getMessage());
+                            }
+                            break;
+                        }
+                        case 2:{
+                            Toast.makeText(Ocr_text_recognition_activity.this, "OCR Tess-two model (Vietnamese)", Toast.LENGTH_SHORT).show();
+                            try{
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(view.getContext().getContentResolver(), uri);
+                                String result = getOCRText(bitmap,false);
+                                textResult.setText(result);
+                            }catch (Exception e){
+                                Log.e(TAG, e.getMessage());
+                            }
+                            break;
+                        }
                     }
                 }
             }
         });
+
 
         btn_copy = findViewById(R.id.btn_copy);
         btn_copy.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +161,7 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
             public void onClick(View view) {
                 textResult.setText("");
                 imageview.setImageURI(null);
+                uri = null;
             }
         });
 
@@ -131,6 +181,53 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+    }
+    private void prepareTessData(){
+
+    }
+
+    public String getOCRText(Bitmap bitmap,boolean isEnglish){
+        try{
+            tessBaseAPI = new TessBaseAPI();
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+        String dataPath = getExternalFilesDir("/").getPath() + "/";
+        //String dataPath = MainApplication.instance.getTessDataParentDirectory();
+        if(isEnglish){
+            tessBaseAPI.init(dataPath, "eng");
+        }
+        else {
+            tessBaseAPI.init(dataPath, "vie");
+        }
+        tessBaseAPI.setImage(bitmap);
+        String retStr = "No result";
+        try{
+            retStr = tessBaseAPI.getUTF8Text();
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+        tessBaseAPI.end();
+        return retStr;
+    }
+
+    public void setSpinner(){
+        spinner = findViewById(R.id.spinner);
+
+        ArrayAdapter adapter = new ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, models);
+        adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                model_kit = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                model_kit = 0;
             }
         });
     }

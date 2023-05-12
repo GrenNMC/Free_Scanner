@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -38,6 +39,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     //add model
     dependencies {
-        implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
+        implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.0'
     }
+    dependencies {
+        implementation 'com.rmtheis:tess-two:5.4.1'
+    }
+
 }
