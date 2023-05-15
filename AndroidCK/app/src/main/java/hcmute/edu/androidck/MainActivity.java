@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
+
 import hcmute.edu.androidck.Activity.FileActivity;
 import hcmute.edu.androidck.Activity.FolderActivity;
 import hcmute.edu.androidck.Activity.Ocr_text_recognition_activity;
@@ -16,13 +19,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private Button btn_allFile;
-    private Button btn_ImageToText;
+    private Button btn_ImageToText,btn_scan,btn_customImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trangchu);
         btn_allFile = findViewById(R.id.btn_allfile);
         btn_ImageToText= findViewById(R.id.btn_ImageToText);
+        btn_scan = findViewById(R.id.btn_scan);
+        btn_customImg = findViewById(R.id.btn_split);
 
         btn_ImageToText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +37,27 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btn_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePicker.Companion.with(MainActivity.this)
+                        .cameraOnly()
+                        .start();
+            }
+        });
+
+        btn_customImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.Companion.with(MainActivity.this)
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .start();
+            }
+        });
+
 
         btn_allFile.setOnClickListener(new View.OnClickListener() {
             @Override
