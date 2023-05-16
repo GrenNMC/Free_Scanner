@@ -69,26 +69,19 @@
         android:layout_height="300px"
         android:background="@color/teal_700"
         android:layout_alignParentBottom="true">
-        <ImageView
-            android:id="@+id/item_delete"
-            android:layout_marginLeft="20dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_delete"
+            style="@style/FabStyle"
             android:layout_centerVertical="true"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/ic_delete"
-            android:background="@drawable/circle_button"
-            />
-        <ImageView
-            android:id="@+id/item_add_folder"
-            android:layout_marginLeft="20dp"
+            app:srcCompat="@drawable/ic_delete"
+            android:layout_marginLeft="10dp"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_folder"
+            style="@style/FabStyle"
             android:layout_centerVertical="true"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_add_folder"
-            android:background="@drawable/circle_button"
-            />
+            app:srcCompat="@drawable/ic_add_folder"
+            android:layout_marginLeft="10dp"/>
     </RelativeLayout>
 
 </RelativeLayout>
