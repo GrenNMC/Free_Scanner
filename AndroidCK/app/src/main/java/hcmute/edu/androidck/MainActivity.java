@@ -15,6 +15,7 @@ import hcmute.edu.androidck.Activity.CustomImageActivity;
 import hcmute.edu.androidck.Activity.FileActivity;
 import hcmute.edu.androidck.Activity.FolderActivity;
 import hcmute.edu.androidck.Activity.Ocr_text_recognition_activity;
+import hcmute.edu.androidck.Activity.ScanActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePicker.Companion.with(MainActivity.this)
-                        .cameraOnly()
-                        .start();
+                Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+                startActivity(intent);
 
             }
         });
