@@ -48,6 +48,9 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import hcmute.edu.androidck.R;
 
 public class Ocr_text_recognition_activity extends AppCompatActivity {
@@ -79,6 +82,7 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
         btn_predict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                prepareTessData();
                 if(uri == null){
                     Toast.makeText(Ocr_text_recognition_activity.this, "No image!!", Toast.LENGTH_SHORT).show();
                 }
@@ -185,7 +189,31 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
         });
     }
     private void prepareTessData(){
-
+        try{
+            File dir = getExternalFilesDir(TESS_DATA);
+            if(!dir.exists()){
+                if (!dir.mkdir()) {
+                    Toast.makeText(getApplicationContext(), "The folder " + dir.getPath() + "was not created", Toast.LENGTH_SHORT).show();
+                }
+            }
+            String fileList[] = getAssets().list("");
+            for(String fileName : fileList){
+                String pathToDataFile = dir + "/" + fileName;
+                if(!(new File(pathToDataFile)).exists()){
+                    InputStream in = getAssets().open(fileName);
+                    OutputStream out = new FileOutputStream(pathToDataFile);
+                    byte [] buff = new byte[1024];
+                    int len ;
+                    while(( len = in.read(buff)) > 0){
+                        out.write(buff,0,len);
+                    }
+                    in.close();
+                    out.close();
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public String getOCRText(Bitmap bitmap,boolean isEnglish){
