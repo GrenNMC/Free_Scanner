@@ -67,7 +67,7 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
     private int model_kit = 0;
     private Uri uri;
     private TextRecognizer textRecognizer;
-    private String[] models = {"Play service ML kit (English, Vietnamese,...)", "OCR Tess-two (Tesseract) (English)", "Tesseract OCR (Vietnamese)"};
+    private String[] models = {"Play service ML kit (English, Vietnamese,...)", "OCR Tess-two (Tesseract) (English)"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,18 +119,7 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
                             Toast.makeText(Ocr_text_recognition_activity.this, "OCR Tess-two model (English)", Toast.LENGTH_SHORT).show();
                             try{
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(view.getContext().getContentResolver(), uri);
-                                String result = getOCRText(bitmap,true);
-                                textResult.setText(result);
-                            }catch (Exception e){
-                                Log.e(TAG, e.getMessage());
-                            }
-                            break;
-                        }
-                        case 2:{
-                            Toast.makeText(Ocr_text_recognition_activity.this, "OCR Tess-two model (Vietnamese)", Toast.LENGTH_SHORT).show();
-                            try{
-                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(view.getContext().getContentResolver(), uri);
-                                String result = getOCRText(bitmap,false);
+                                String result = getOCRText(bitmap);
                                 textResult.setText(result);
                             }catch (Exception e){
                                 Log.e(TAG, e.getMessage());
@@ -216,7 +205,7 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
         }
     }
 
-    public String getOCRText(Bitmap bitmap,boolean isEnglish){
+    public String getOCRText(Bitmap bitmap){
         try{
             tessBaseAPI = new TessBaseAPI();
         }catch (Exception e){
@@ -224,12 +213,7 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
         }
         String dataPath = getExternalFilesDir("/").getPath() + "/";
         //String dataPath = MainApplication.instance.getTessDataParentDirectory();
-        if(isEnglish){
-            tessBaseAPI.init(dataPath, "eng");
-        }
-        else {
-            tessBaseAPI.init(dataPath, "vie");
-        }
+        tessBaseAPI.init(dataPath, "eng");
         tessBaseAPI.setImage(bitmap);
         String retStr = "No result";
         try{
