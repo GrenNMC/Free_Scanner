@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -22,11 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +40,7 @@ import hcmute.edu.androidck.Adapter.FileAdapter;
 import hcmute.edu.androidck.Model.File;
 import hcmute.edu.androidck.R;
 
-public class FileActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener
+public class FileActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener,FileAdapter.OnItemClickListener
 {
 
 
@@ -47,8 +50,10 @@ public class FileActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private ImageView btn_back;
     private Uri uri;
     private List<File> listFile;
-    private StorageReference mStorageRef;
+    private FirebaseStorage mStorage;
+
     private DatabaseReference mDataRef;
+    private ValueEventListener mDBListener;
     private FileAdapter mAdapter;
 
     @Override
@@ -63,17 +68,26 @@ public class FileActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         recyclerView.addItemDecoration(itemDecoration);
 
         listFile = new ArrayList<>();
+        mAdapter =  new FileAdapter(FileActivity.this, (ArrayList<File>) listFile);
+        recyclerView.setAdapter(mAdapter);
+
+
+        mAdapter.setOnItemClickListener(FileActivity.this);
+        mStorage =FirebaseStorage.getInstance();
         mDataRef = FirebaseDatabase.getInstance().getReference("files");
 
-        mDataRef.addValueEventListener(new ValueEventListener() {
+        mDBListener =  mDataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+
+                    listFile.clear();
                     for(DataSnapshot postSnapshot: snapshot.getChildren()){
                         File file = postSnapshot.getValue(File.class);
+                        file.setKey(postSnapshot.getKey());
                         listFile.add(file);
                     }
-                    mAdapter =  new FileAdapter(FileActivity.this, (ArrayList<File>) listFile);
-                    recyclerView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -118,54 +132,36 @@ public class FileActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         }
     }
-//    void showDiaLog(){
-//        final Dialog dialog = new Dialog(this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setCancelable(true);
-//        dialog.setContentView(R.layout.show_dialog);
-//
-//        final EditText fname = dialog.findViewById(R.id.file_name);
-//        final ImageView view_image = dialog.findViewById(R.id.view_iamge);
-//        final Button btn_choose = dialog.findViewById(R.id.btn_chooseFile);
-//        final Button btn_upload = dialog.findViewById(R.id.btn_upload);
-//
-//
-//        btn_choose.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                    openFileChoose();
-//            }
-//        });
-//        dialog.show();
-//    }
-//
-//    private void openFileChoose() {
-//
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(intent,PICK_IMAGE_REQUEST);
-//
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-//        && data!= null && data.getData() != null){
-//
-//            uri = data.getData();
-//            Picasso.get().load(uri).into(imageView);
-//        }
-//    }
 
-    private List<File> getListFile() {
-        List<File> list = new ArrayList<>();
-        list.add(new File("filename.jpx","1"));
-        list.add(new File("filename.jpx","1"));
-        list.add(new File("filename.jpx","1"));
+    @Override
+    public void onItemClick(int position) {
+            Toast.makeText(this,"Normal click "+position,Toast.LENGTH_SHORT).show();
+    }
 
-        return list;
+    @Override
+    public void onDeleteClick(int position) {
+        File selectItem = listFile.get(position);
+        final String selectKey = selectItem.getKey();
+
+
+        StorageReference imageRef = mStorage.getReferenceFromUrl(selectItem.getImageUrl());
+        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                mDataRef.child(selectKey).removeValue();
+                Toast.makeText(FileActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onEditClick(int position) {
+        Toast.makeText(this,"Edit click "+position,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDataRef.removeEventListener(mDBListener);
     }
 }

@@ -1,8 +1,11 @@
 package hcmute.edu.androidck.Model;
 
+import com.google.firebase.database.Exclude;
+
 public class File {
     private String nameFile;
     private String imageUrl;
+    private String mKey;
 
     public File(){
 
@@ -30,5 +33,14 @@ public class File {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Exclude
+    public String getKey() {
+        return mKey;
+    }
+    @Exclude
+    public void setKey(String mKey) {
+        this.mKey = mKey;
     }
 }
