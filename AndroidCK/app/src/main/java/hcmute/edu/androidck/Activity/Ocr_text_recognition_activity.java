@@ -38,6 +38,10 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextDetector;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -50,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import hcmute.edu.androidck.R;
 
@@ -67,7 +72,7 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
     private int model_kit = 0;
     private Uri uri;
     private TextRecognizer textRecognizer;
-    private String[] models = {"Play service ML kit (English, Vietnamese,...)", "OCR Tess-two (Tesseract) (English)"};
+    private String[] models = {"Play service ML kit (English, Vietnamese,...)","Firebase ML kit (English, Vietnamese,...)", "OCR Tess-two (Tesseract) (English)"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +120,27 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
                             }
                             break;
                         }
-                        case 1:{
+                        case  1:{
+                            try {
+                                FirebaseVisionImage image = FirebaseVisionImage.fromFilePath(view.getContext(),uri);
+                                FirebaseVisionTextDetector detector = FirebaseVision.getInstance().getVisionTextDetector();
+                                detector.detectInImage(image).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+                                    @Override
+                                    public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                                        recognitionText(firebaseVisionText);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(Ocr_text_recognition_activity.this, "Recognition Fail!!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            break;
+                        }
+                        case 2:{
                             Toast.makeText(Ocr_text_recognition_activity.this, "OCR Tess-two model (English)", Toast.LENGTH_SHORT).show();
                             try{
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(view.getContext().getContentResolver(), uri);
@@ -176,6 +201,17 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+    private void recognitionText(FirebaseVisionText text){
+        List<FirebaseVisionText.Block> blocks = text.getBlocks();
+        if (blocks.size() == 0) {
+            Toast.makeText(this, "No text for recognition!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        for (FirebaseVisionText.Block block : text.getBlocks()) {
+            String txt = block.getText();
+            textResult.setText(txt);
+        }
     }
     private void prepareTessData(){
         try{

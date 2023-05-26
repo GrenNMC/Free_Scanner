@@ -33,6 +33,7 @@ public class CustomImageActivity extends AppCompatActivity {
 
     ImageView imageView;
     FloatingActionButton fa_clear,fa_next;
+    ImageView btnBack;
     private static int REQUEST_CODE =1;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,9 +43,15 @@ public class CustomImageActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageview);
         fa_clear = findViewById(R.id.fab_cancel);
         fa_next = findViewById(R.id.fab_next);
+        btnBack = findViewById(R.id.btnBack);
 
 
-
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         fa_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
