@@ -11,7 +11,7 @@
         android:id="@+id/image_file"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/demo"
+       android:src="@drawable/ic_launcher_background"
         android:layout_marginRight="10dp"/>
 
     <LinearLayout

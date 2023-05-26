@@ -1,87 +1,34 @@
 {
   "project_info": {
-<<<<<<< HEAD
     "project_number": "676554838760",
+    "firebase_url": "https://cuoiky-7ed37-default-rtdb.firebaseio.com",
     "project_id": "cuoiky-7ed37",
     "storage_bucket": "cuoiky-7ed37.appspot.com"
-=======
-    "project_number": "593113921867",
-    "firebase_url": "https://songfirebase-91a51-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "songfirebase-91a51",
-    "storage_bucket": "songfirebase-91a51.appspot.com"
->>>>>>> 062bf0e (add func prepareTessData)
   },
   "client": [
     {
       "client_info": {
-<<<<<<< HEAD
         "mobilesdk_app_id": "1:676554838760:android:03d57184e0c051b83d2f5d",
         "android_client_info": {
           "package_name": "hcmute.edu.androidck"
-=======
-        "mobilesdk_app_id": "1:593113921867:android:f75e8907599cd0254550ce",
-        "android_client_info": {
-          "package_name": "com.example.layoutservice"
->>>>>>> 062bf0e (add func prepareTessData)
         }
       },
       "oauth_client": [
         {
-<<<<<<< HEAD
           "client_id": "676554838760-beiblhign6e4olfnlgnaim9cgnqf1fc0.apps.googleusercontent.com",
-=======
-          "client_id": "593113921867-8hcjatvsi26alnlh8k9518hrikopomsv.apps.googleusercontent.com",
->>>>>>> 062bf0e (add func prepareTessData)
           "client_type": 3
         }
       ],
       "api_key": [
         {
-<<<<<<< HEAD
           "current_key": "AIzaSyBn2cWuZ2p2x4CTQmpKeLCY0JjrEpkPopc"
-=======
-          "current_key": "AIzaSyCVvW5zYMDLE4I2NsndN0KcSYuW3N4yosU"
->>>>>>> 062bf0e (add func prepareTessData)
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-<<<<<<< HEAD
               "client_id": "676554838760-beiblhign6e4olfnlgnaim9cgnqf1fc0.apps.googleusercontent.com",
-=======
-              "client_id": "593113921867-8hcjatvsi26alnlh8k9518hrikopomsv.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:593113921867:android:15d9b51c4f6bffee4550ce",
-        "android_client_info": {
-          "package_name": "hcmute.edu.androidck"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "593113921867-8hcjatvsi26alnlh8k9518hrikopomsv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCVvW5zYMDLE4I2NsndN0KcSYuW3N4yosU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "593113921867-8hcjatvsi26alnlh8k9518hrikopomsv.apps.googleusercontent.com",
->>>>>>> 062bf0e (add func prepareTessData)
               "client_type": 3
             }
           ]

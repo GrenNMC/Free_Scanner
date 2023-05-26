@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/title_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD NEW"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <LinearLayout
+        android:id="@+id/container_filename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        android:layout_below="@+id/title_add">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose File"
+            android:id="@+id/btn_chooseFile"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter File Name"
+            android:id="@+id/file_name"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/view_iamge"
+        android:layout_width="match_parent"
+        android:layout_below="@id/container_filename"
+        android:layout_height="200dp"
+        android:src="@drawable/btn_gallery"
+        android:layout_marginBottom="16dp"/>
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload"
+        android:layout_below="@+id/view_iamge"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

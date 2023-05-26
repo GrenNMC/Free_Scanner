@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item
+    android:id="@+id/item_add"
+    android:title="Add New"/>
+    <item
+        android:id="@+id/item_sort"
+        android:title="Sort By">
+        <menu>
+            <item
+                android:id="@+id/sub_item1"
+                android:title="Desc"/>
+            <item
+                android:id="@+id/sub_item2"
+                android:title="Asc"/>
+        </menu>
+    </item>
+</menu>

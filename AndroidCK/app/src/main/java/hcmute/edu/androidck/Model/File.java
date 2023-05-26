@@ -1,26 +1,19 @@
 package hcmute.edu.androidck.Model;
 
 public class File {
-    private int idFile;
     private String nameFile;
-    private int isFoler;
+    private String imageUrl;
 
     public File(){
 
     }
 
-    public File(int idFile, String nameFile, int isFoler) {
-        this.idFile = idFile;
+    public File(String nameFile, String imageUrl) {
+        if(nameFile.trim().equals("")){
+            nameFile = "No name";
+        }
         this.nameFile = nameFile;
-        this.isFoler = isFoler;
-    }
-
-    public int getIdFile() {
-        return idFile;
-    }
-
-    public void setIdFile(int idFile) {
-        this.idFile = idFile;
+        this.imageUrl = imageUrl;
     }
 
     public String getNameFile() {
@@ -31,11 +24,11 @@ public class File {
         this.nameFile = nameFile;
     }
 
-    public int getIsFoler() {
-        return isFoler;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setIsFoler(int isFoler) {
-        this.isFoler = isFoler;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

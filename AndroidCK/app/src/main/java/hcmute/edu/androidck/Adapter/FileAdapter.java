@@ -1,9 +1,11 @@
 package hcmute.edu.androidck.Adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -47,6 +50,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
             return;
         }
         holder.title_file.setText(file.getNameFile());
+        Picasso.with(context).load(file.getImageUrl()).placeholder(R.mipmap.ic_launcher).fit()
+                .centerCrop()
+                .into(holder.image_file);
 
 
     }
@@ -64,11 +70,13 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
 
         private TextView title_file;
         private LinearLayout layout_item;
+        private ImageView image_file;
 
         public FileHolder(@NonNull View v){
             super(v);
             title_file = v.findViewById(R.id.title_file);
             layout_item = v.findViewById(R.id.layout_item);
+            image_file = v.findViewById(R.id.image_file);
 
 
         }
