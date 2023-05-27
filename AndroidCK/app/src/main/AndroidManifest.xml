@@ -31,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.FolderActivity" />
         <activity android:name=".Activity.FileActivity" />
         <activity android:name=".Activity.CustomImageActivity"/>
         <activity android:name=".Activity.ScanActivity"/>

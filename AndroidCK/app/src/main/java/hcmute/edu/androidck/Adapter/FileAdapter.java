@@ -1,34 +1,37 @@
 package hcmute.edu.androidck.Adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import hcmute.edu.androidck.Model.File;
 import hcmute.edu.androidck.R;
 
-public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
+public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> implements Filterable {
 
 
 
-    private ArrayList<File> listFile;
+    private List<File> listFile;
+    private List<File> listFileOld;
     private Context context;
 
     private int idLayout;
@@ -42,8 +45,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_file, parent,false);
         return new FileHolder(view);
     }
-    public FileAdapter(Context context,ArrayList<File> listFile){
+    public FileAdapter(Context context, List<File> listFile){
         this.listFile = listFile;
+        this.listFileOld = listFile;
         this.context = context;
     }
     @Override
@@ -60,6 +64,39 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
                 .into(holder.image_file);
 
     }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String strSearch = constraint.toString();
+                if(strSearch.isEmpty()){
+                    listFile = listFileOld;
+                }
+                else {
+                    List<File> list = new ArrayList<>();
+                    for(File file : listFileOld){
+                        if(file.getNameFile().toLowerCase().contains(strSearch.toLowerCase())){
+                            list.add(file);
+                        }
+                    }
+                    listFile = list;
+
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values  = listFile;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                    listFile = (List<File>) results.values;
+                    notifyDataSetChanged();
+            }
+        };
+    }
+
     public interface OnItemClickListener{
         void onItemClick(int position);
         void onEditClick(int position);
@@ -135,7 +172,8 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
                 }
             }
         }
-    }
+        }
+
 
 
 }

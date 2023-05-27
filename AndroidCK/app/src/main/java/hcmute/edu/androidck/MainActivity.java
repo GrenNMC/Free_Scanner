@@ -2,18 +2,14 @@ package hcmute.edu.androidck;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 
-import com.github.dhaval2404.imagepicker.ImagePicker;
-
 import hcmute.edu.androidck.Activity.CustomImageActivity;
 import hcmute.edu.androidck.Activity.FileActivity;
-import hcmute.edu.androidck.Activity.FolderActivity;
 import hcmute.edu.androidck.Activity.Ocr_text_recognition_activity;
 import hcmute.edu.androidck.Activity.ScanActivity;
 

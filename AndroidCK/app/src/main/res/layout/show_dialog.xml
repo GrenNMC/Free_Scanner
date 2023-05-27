@@ -8,7 +8,7 @@
         android:id="@+id/title_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ADD NEW"
+        android:text="UPDATE"
         android:textSize="24dp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
@@ -20,30 +20,19 @@
         android:orientation="horizontal"
         android:layout_marginBottom="16dp"
         android:layout_below="@+id/title_add">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Choose File"
-            android:id="@+id/btn_chooseFile"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter File Name"
             android:id="@+id/file_name"/>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/view_iamge"
-        android:layout_width="match_parent"
-        android:layout_below="@id/container_filename"
-        android:layout_height="200dp"
-        android:src="@drawable/btn_gallery"
-        android:layout_marginBottom="16dp"/>
+
     <Button
-        android:id="@+id/btn_upload"
+        android:id="@+id/btn_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upload"
-        android:layout_below="@+id/view_iamge"
+        android:layout_below="@+id/container_filename"
         android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

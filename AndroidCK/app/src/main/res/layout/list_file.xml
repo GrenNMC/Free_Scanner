@@ -65,24 +65,4 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/search_bar"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="300px"
-        android:background="@color/teal_700"
-        android:layout_alignParentBottom="true">
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_delete"
-            style="@style/FabStyle"
-            android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_delete"
-            android:layout_marginLeft="10dp"/>
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_file"
-            style="@style/FabStyle"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            app:srcCompat="@drawable/baseline_insert_drive_file_24"
-            android:layout_marginLeft="10dp"/>
-    </RelativeLayout>
-
 </RelativeLayout>
