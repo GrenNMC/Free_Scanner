@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="30dp">
+    android:layout_marginTop="10dp">
 
     <TextView
         android:id="@+id/app_name"
@@ -46,44 +46,45 @@
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:src="@drawable/image_trangchu" />
+
         <TextView
             android:id="@+id/textResult"
             android:layout_width="match_parent"
             android:padding="15dp"
             android:background="#ffff"
+            android:scrollbars = "vertical"
             android:layout_marginTop="10dp"
             android:layout_height="250dp"
             android:hint="Result ..."
             android:textSize="15sp"/>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/linearLayout"
         android:background="#0085FF"
         android:orientation="horizontal">
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_clear"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            style="@style/FabStyle"
             android:src="@drawable/cancel"
             android:layout_gravity="center"
-            android:layout_weight="1"/>
-        <ImageView
+            android:layout_centerVertical="true"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_copy"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            style="@style/FabStyle"
             android:src="@drawable/coppy"
             android:layout_gravity="center"
-            android:layout_weight="1"/>
-        <ImageView
+           android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_predict"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            style="@style/FabStyle"
             android:src="@drawable/predict_text"
             android:layout_gravity="center"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            android:layout_centerVertical="true"
+           android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
 
 </RelativeLayout>

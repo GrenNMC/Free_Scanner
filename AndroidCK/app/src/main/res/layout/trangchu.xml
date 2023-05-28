@@ -19,26 +19,15 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/black"/>
 
-    <ImageView
-        android:id="@+id/btnSearch"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_search1"
-        android:layout_alignParentStart="true"/>
 
-    <ImageView
-        android:id="@+id/btn_more"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_more"
-        android:layout_alignParentEnd="true" />
+
 
     <ImageView
         android:id="@+id/imageview"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:src="@drawable/image_trangchu"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:layout_below="@id/app_name"
         android:layout_centerHorizontal="true"/>
     

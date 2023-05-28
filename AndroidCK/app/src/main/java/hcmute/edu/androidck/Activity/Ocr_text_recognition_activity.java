@@ -24,13 +24,17 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.method.ArrowKeyMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,10 +42,13 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextDetector;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.UploadTask;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -64,11 +71,13 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
     private TessBaseAPI tessBaseAPI;
     private ImageView imageview;
     private ImageView btnBack;
-    private ImageView btn_clear;
-    private ImageView btn_predict;
-    private ImageView btn_copy;
+    private FloatingActionButton btn_clear;
+    private FloatingActionButton btn_predict;
+    private FloatingActionButton btn_copy;
     private TextView textResult;
+    private ProgressBar mProgress;
     private Spinner spinner;
+
     private int model_kit = 0;
     private Uri uri;
     private TextRecognizer textRecognizer;
@@ -81,7 +90,8 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
         getPermission();
         setSpinner();
         textResult = findViewById(R.id.textResult);
-
+        textResult.setMovementMethod(new ScrollingMovementMethod());
+        mProgress = findViewById(R.id.progress_bar);
 
         btn_predict = findViewById(R.id.btn_predict);
         btn_predict.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +108,17 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
                                 Toast.makeText(Ocr_text_recognition_activity.this, "Using model Play service ML kit!", Toast.LENGTH_SHORT).show();
                                 InputImage image = InputImage.fromFilePath(view.getContext(), uri);
                                 textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-
                                 Task<Text> taskResult = textRecognizer.process(image)
                                         .addOnSuccessListener(new OnSuccessListener<Text>() {
                                             @Override
                                             public void onSuccess(Text text) {
+                                                Handler handler = new Handler();
+                                                handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        mProgress.setProgress(0);
+                                                    }
+                                                },500);
                                                 String resultText = text.getText();
                                                 textResult.setText(resultText);
                                             }
