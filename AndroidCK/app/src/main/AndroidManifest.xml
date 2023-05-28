@@ -35,15 +35,8 @@
         <activity android:name=".Activity.CustomImageActivity"/>
         <activity android:name=".Activity.ScanActivity"/>
         <activity android:name=".Activity.AddNewImage"/>
-        <provider
-            android:authorities="hcmute.edu.androidck.fileprovider"
-            android:name="androidx.core.content.FileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-
-            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
 
     </application>
 
