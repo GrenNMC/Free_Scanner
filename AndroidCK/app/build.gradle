@@ -61,7 +61,4 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker-support:1.7.1'
     implementation 'com.firebaseui:firebase-ui-database:4.3.2'
 
-    dependencies {
-        api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
-    }
 }

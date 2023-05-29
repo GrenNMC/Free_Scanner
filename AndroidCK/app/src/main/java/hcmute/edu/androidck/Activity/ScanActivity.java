@@ -3,6 +3,7 @@ package hcmute.edu.androidck.Activity;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -24,11 +25,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -42,8 +46,6 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.googlecode.tesseract.android.TessBaseAPI;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -113,7 +115,13 @@ public class ScanActivity extends AppCompatActivity {
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(ScanActivity.this);
+                ImagePicker.Companion.with(ScanActivity.this)
+                        .cameraOnly()
+                        .crop()
+                        .compress(1024)
+                        .maxResultSize(1080,1080)
+                        .start();
+
             }
         });
 
@@ -154,7 +162,6 @@ public class ScanActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Saved Successfully", Toast.LENGTH_SHORT).show();
         } catch (Exception e){
-            Toast.makeText(this, "Image can not save", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
@@ -176,20 +183,15 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK){
-                Uri resultUri = result.getUri();
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),resultUri);
-                    image_scan.setImageBitmap(bitmap);
-                    getTextFromImage(bitmap);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (resultCode == Activity.RESULT_OK){
+            Uri resultUri = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),resultUri);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+            image_scan.setImageBitmap(bitmap);
+            getTextFromImage(bitmap);
         }
     }
     private void getTextFromImage(Bitmap bitmap){

@@ -35,8 +35,7 @@
         <activity android:name=".Activity.CustomImageActivity"/>
         <activity android:name=".Activity.ScanActivity"/>
         <activity android:name=".Activity.AddNewImage"/>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+
 
     </application>
 
