@@ -112,13 +112,6 @@ public class Ocr_text_recognition_activity extends AppCompatActivity {
                                         .addOnSuccessListener(new OnSuccessListener<Text>() {
                                             @Override
                                             public void onSuccess(Text text) {
-                                                Handler handler = new Handler();
-                                                handler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        mProgress.setProgress(0);
-                                                    }
-                                                },500);
                                                 String resultText = text.getText();
                                                 textResult.setText(resultText);
                                             }
