@@ -1,6 +1,4 @@
 # Free Scanner
-Đồ án môn Lập trình trên di động
-
 ---
 ### Thành viên tham gia
 * Nguyễn Minh Cường
